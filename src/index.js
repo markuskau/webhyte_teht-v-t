@@ -1,5 +1,5 @@
 import express from 'express';
-import (getItems) from './items.js';
+import {getItems, getItemsbyId, deleteItem, postItem, putItembyId} from './items.js';
 const hostname = '127.0.0.1';
 const app = express();
 const port = 3000;
@@ -26,15 +26,10 @@ app.get('/items', getItems);
 app.get('/items/:id', getItemsbyId);
 
 // put route for updating existing item
-app.put('/items/:id', (req, res) => {
-  res.json(items);
-});
+app.put('/items/:id', putItembyId);
 
 // delete route for removing an item
-app.delete('items/:id', (req, res) => {
-  res.json(items);
-});
-
+app.delete('items/:id', deleteItem);
 // add new item
 app.post('/items', postItem);
 

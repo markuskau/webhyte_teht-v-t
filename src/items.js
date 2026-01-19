@@ -16,20 +16,40 @@ const getItemsbyId = (req, res) => {
    } else {
     res.status(404).json({message: 'item not found'});
    }
-  res.send(itemFound);
 };
 
-const putItembyId = 
+const putItembyId = (req, res) => {
+  console.log('updating item id:', req.params.id);
+  const itemIndex = items.findIndex((item) => item.id == req.params.id);
+  if (itemIndex !== -1) {
+    items[itemIndex] = {...items[itemIndex], ...req.body};
+    res.json({message: 'item updated', item: items[itemIndex]});
+  } else {
+    res.status(404).json({message: 'item not found'});
+  }
+};
 
-const deleteItem = 
+const deleteItem = (req, res) => {
+  console.log('deleting item id:', req.params.id);
+  const itemIndex = items.findIndex((item) => item.id == req.params.id);
+  if (itemIndex !== -1) {
+    items.splice(itemIndex, 1);
+    res.json({message: 'item deleted'});
+  } else {
+    res.status(404).json({message: 'item not found'});
+  }
+};
 
 const postItem = (req, res) => {
-  //console.log('add item request body', req.body)
-  req.body.id = items.length + 1;
-  items.push (req.body);
-  res.status(201).json({message: 'new item added'});
+  //console.log('add item request body', req.body);
+  //lisää id listaan lisättävälle objektille
+  const newId =
+    items.length > 0 ? Math.max(...items.map((item) => item.id)) + 1 : 1;
+  const newItem = {id: newId, ...req.body};
+  items.push(newItem);
+  res.status(201).json({message: 'new item added', item: newItem});
 };
 
 
 
-export (getItems, getItemsbyId, putItembyId, deleteItem, postItem);
+export {getItems, getItemsbyId, putItembyId, deleteItem, postItem};
