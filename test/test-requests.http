@@ -9,3 +9,8 @@ POST http://localhost:3000/items
 Content-Type: application/json
 
 {"name": "Mandariini"}
+
+### Delete item with id 2
+DELETE http://localhost:3000/items
+
+###
