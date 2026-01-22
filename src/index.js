@@ -1,5 +1,12 @@
 import express from 'express';
-import {getItems, getItemsbyId, deleteItem, postItem, putItembyId} from './items.js';
+import {
+  getItems, 
+  getItemsbyId, 
+  deleteItem, 
+  postItem, 
+  putItembyId, 
+} from './items.js';
+import {getUsers, postLogin, postUser} from './users.js';
 const hostname = '127.0.0.1';
 const app = express();
 const port = 3000;
@@ -32,6 +39,22 @@ app.put('/items/:id', putItembyId);
 app.delete('items/:id', deleteItem);
 // add new item
 app.post('/items', postItem);
+
+
+// Users resource endpoints
+// GET all users
+app.get('/api/users', getUsers);
+// POST new user
+app.post('/api/users', postUser);
+// POST user login
+app.post('/api/users/login', postLogin);
+
+// TODO: get user by id
+// app.get('/api/users/:id');
+
+// TODO: put user by id
+
+// TODO: delete user by id
 
 
 
