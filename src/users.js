@@ -36,8 +36,32 @@ const getUsers = (req, response) => {
 };
 
 // TODO: getUserById
+const getUserById = (req, res) => {
+  const id = Number(req.params.id);
+  const user = users.find(u => u.id === id);
+
+  if (!user) {
+    return res.status(404).json({error: 'user not found'});
+  }
+};
 // TODO: putUserById
+const putUserById = (req, res) => {
+  const id = Number(req.params.id);
+  const index = users.findIndex(u => u.id === id);
+
+  if (index === 1) {
+    return res.status(404).json({error: 'user not found'});
+  }
+};
 // TODO: deleteUserById
+const deleteUserById = (req, res) => {
+  const id = Number(req.params.id);
+  const index = users.findIndex(u => u.id === id);
+
+  if (index === -1) {
+    return res.status(404).json({error: 'user not found'});
+  }
+};
 
 // Käyttäjän lisäys (rekisteröityminen)
 const postUser = (pyynto, vastaus) => {
@@ -73,4 +97,4 @@ const postLogin = (req, res) => {
   res.status(404).json({error: 'user not found'});
 };
 
-export {getUsers, postUser, postLogin};
+export {getUsers, postUser, postLogin, getUserById, putUserById, deleteUserById};

@@ -1,45 +1,41 @@
 import express from 'express';
 import {
-  getItems, 
-  getItemsbyId, 
-  deleteItem, 
-  postItem, 
-  putItembyId, 
+  deleteItemById,
+  getItemById,
+  getItems,
+  postNewItem,
+  putItemById,
+  getUserById,
+  putUserById,
+  deleteUserById,
 } from './items.js';
 import {getUsers, postLogin, postUser} from './users.js';
 const hostname = '127.0.0.1';
 const app = express();
 const port = 3000;
 
-
-// parsitaan json data pyynnöstä ja lisää request-objektiin
+// parsitaan json data pyynnöstä ja lisätään request-objektiin
 app.use(express.json());
 
-// tarjotaan websivusto (fe) palvelimen juuresta
-app.use(express.static('public'));
-
+// tarjoillaan webbisivusto (front-end) palvelimen juuressa
+app.use('/', express.static('public'));
 
 // API root
 app.get('/api', (req, res) => {
-  res.send('Welcome to my REST API!');
+  res.send('This is dummy items API!');
 });
 
-
-
+// Endpoints for 'items' resource
 // Get all items
-app.get('/items', getItems);
-
-// get item based on id
-app.get('/items/:id', getItemsbyId);
-
-// put route for updating existing item
-app.put('/items/:id', putItembyId);
-
-// delete route for removing an item
-app.delete('items/:id', deleteItem);
-// add new item
-app.post('/items', postItem);
-
+app.get('/api/items', getItems);
+// Get item based on id
+app.get('/api/items/:id', getItemById);
+// PUT route for items
+app.put('/api/items/:id', putItemById);
+// DELETE route for items
+app.delete('/api/items/:id', deleteItemById);
+// Add new item
+app.post('/api/items', postNewItem);
 
 // Users resource endpoints
 // GET all users
@@ -51,13 +47,13 @@ app.post('/api/users/login', postLogin);
 
 // TODO: get user by id
 // app.get('/api/users/:id');
+app.get('/api/users/:id', getUserById);
 
 // TODO: put user by id
+app.put('/api/users/:id', putUserById);
 
 // TODO: delete user by id
-
-
-
+app.delete('/api/users/:id', deleteUserById);
 
 app.listen(port, hostname, () => {
   console.log(`Server running at http://${hostname}:${port}/`);

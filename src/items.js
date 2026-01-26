@@ -1,24 +1,25 @@
+// Dummy mock data (nollautuu aina, kun sovelluksen käynnistää uudelleen)
 const items = [
   {id: 1, name: 'Omena'},
   {id: 2, name: 'Appelsiini'},
-  {id: 3, name: 'Ananas'},
+  {id: 3, name: 'Banaaneja'},
 ];
 
 const getItems = (req, res) => {
   res.json(items);
 };
 
-const getItemsbyId = (req, res) => {
+const getItemById = (req, res) => {
   console.log('getting item id:', req.params.id);
-  const itemFound = items.find(item => item.id == req.params.id);
+  const itemFound = items.find((item) => item.id == req.params.id);
   if (itemFound) {
     res.json(itemFound);
-   } else {
+  } else {
     res.status(404).json({message: 'item not found'});
-   }
+  }
 };
 
-const putItembyId = (req, res) => {
+const putItemById = (req, res) => {
   console.log('updating item id:', req.params.id);
   const itemIndex = items.findIndex((item) => item.id == req.params.id);
   if (itemIndex !== -1) {
@@ -29,7 +30,7 @@ const putItembyId = (req, res) => {
   }
 };
 
-const deleteItem = (req, res) => {
+const deleteItemById = (req, res) => {
   console.log('deleting item id:', req.params.id);
   const itemIndex = items.findIndex((item) => item.id == req.params.id);
   if (itemIndex !== -1) {
@@ -40,8 +41,13 @@ const deleteItem = (req, res) => {
   }
 };
 
-const postItem = (req, res) => {
+const postNewItem = (req, res) => {
   //console.log('add item request body', req.body);
+  // name is mandatory property for new item
+  if (!req.body.name) {
+    // jos nimi puuttuu, funktion suoritus loppuu ja palautetaan 400 error
+    return res.status(400).json({message: 'bad request'});
+  }
   //lisää id listaan lisättävälle objektille
   const newId =
     items.length > 0 ? Math.max(...items.map((item) => item.id)) + 1 : 1;
@@ -50,6 +56,4 @@ const postItem = (req, res) => {
   res.status(201).json({message: 'new item added', item: newItem});
 };
 
-
-
-export {getItems, getItemsbyId, putItembyId, deleteItem, postItem};
+export {getItems, getItemById, putItemById, deleteItemById, postNewItem,};
