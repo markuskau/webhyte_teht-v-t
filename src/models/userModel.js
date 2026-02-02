@@ -2,6 +2,11 @@
  * Mock data and endpoints for users resource
  */
 
+import promisePool from '../utils/database.js';
+
+console.log('db connection test', promisePool);
+promisePool.query('SELECT * FROM Users')
+
 const users = [
   {
     id: 1,
