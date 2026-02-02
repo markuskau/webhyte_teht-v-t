@@ -1,9 +1,4 @@
-// Dummy mock data (nollautuu aina, kun sovelluksen käynnistää uudelleen)
-const items = [
-  {id: 1, name: 'Omena'},
-  {id: 2, name: 'Appelsiini'},
-  {id: 3, name: 'Banaaneja'},
-];
+import items from '../models/itemModel.js';
 
 const getItems = (req, res) => {
   res.json(items);
@@ -56,4 +51,4 @@ const postNewItem = (req, res) => {
   res.status(201).json({message: 'new item added', item: newItem});
 };
 
-export {getItems, getItemById, putItemById, deleteItemById, postNewItem,};
+export {getItems, getItemById, putItemById, deleteItemById, postNewItem};

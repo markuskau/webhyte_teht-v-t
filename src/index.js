@@ -1,18 +1,14 @@
 import express from 'express';
-import {
-  deleteItemById,
-  getItemById,
-  getItems,
-  postNewItem,
-  putItemById,
-  getUserById,
-  putUserById,
-  deleteUserById,
-} from './items.js';
-import {getUsers, postLogin, postUser} from './users.js';
+import cors from 'cors';
+import itemRouter from './routes/itemRouter.js';
+import userRouter from './routes/userRouter.js';
+import requestLogger from './middlewares/logger.js';
 const hostname = '127.0.0.1';
 const app = express();
 const port = 3000;
+
+// Enable CORS
+app.use(cors());
 
 // parsitaan json data pyynnöstä ja lisätään request-objektiin
 app.use(express.json());
@@ -20,40 +16,22 @@ app.use(express.json());
 // tarjoillaan webbisivusto (front-end) palvelimen juuressa
 app.use('/', express.static('public'));
 
+// Oma loggari määritelmä
+app.use(requestLogger);
+
+
 // API root
 app.get('/api', (req, res) => {
   res.send('This is dummy items API!');
 });
 
-// Endpoints for 'items' resource
-// Get all items
-app.get('/api/items', getItems);
-// Get item based on id
-app.get('/api/items/:id', getItemById);
-// PUT route for items
-app.put('/api/items/:id', putItemById);
-// DELETE route for items
-app.delete('/api/items/:id', deleteItemById);
-// Add new item
-app.post('/api/items', postNewItem);
 
-// Users resource endpoints
-// GET all users
-app.get('/api/users', getUsers);
-// POST new user
-app.post('/api/users', postUser);
-// POST user login
-app.post('/api/users/login', postLogin);
 
-// TODO: get user by id
-// app.get('/api/users/:id');
-app.get('/api/users/:id', getUserById);
+app.use('/api/items', itemRouter);
 
-// TODO: put user by id
-app.put('/api/users/:id', putUserById);
 
-// TODO: delete user by id
-app.delete('/api/users/:id', deleteUserById);
+app.use('/api/users', userRouter);
+
 
 app.listen(port, hostname, () => {
   console.log(`Server running at http://${hostname}:${port}/`);
