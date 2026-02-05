@@ -1,32 +1,9 @@
-/**
- * Mock data and endpoints for users resource
- */
-
 import promisePool from '../utils/database.js';
 
-console.log('db connection test', promisePool);
-promisePool.query('SELECT * FROM Users')
+const findUserByUsername = async (username) => {
+  const sql = 'SELECT * FROM Users WHERE username = ?';
+  const [rows] = await promisePool.execute(sql, [username]);
+  return rows[0];
+};
 
-const users = [
-  {
-    id: 1,
-    username: 'johndoe',
-    password: 'password1',
-    email: 'johndoe@example.com',
-  },
-  {
-    id: 2,
-    username: 'janedoe',
-    password: 'password2',
-    email: 'janedoe@example.com',
-  },
-  {
-    id: 3,
-    username: 'bobsmith',
-    password: 'password3',
-    email: 'bobsmith@example.com',
-  },
-];
-
-
-export default users;
+export {findUserByUsername};

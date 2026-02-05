@@ -1,7 +1,7 @@
-import users from '../models/userModel.js';
+//import users from '../models/userModel.js';
+import { findUserByUsername } from "../models/userModel.js";
 
 
-//TODO: add users endpoints
 
 const getUsers = (req, response) => {
   // ÄLÄ IKINÄ lähetä salasanoja HTTP-vastauksessa
@@ -16,7 +16,7 @@ const getUsers = (req, response) => {
 // TODO: getUserById
 const getUserById = (req, res) => {
   const id = Number(req.params.id);
-  const user = users.find(u => u.id === id);
+  const user = users.find((u) => u.id === id);
 
   if (!user) {
     return res.status(404).json({error: 'user not found'});
@@ -25,7 +25,7 @@ const getUserById = (req, res) => {
 // TODO: putUserById
 const putUserById = (req, res) => {
   const id = Number(req.params.id);
-  const index = users.findIndex(u => u.id === id);
+  const index = users.findIndex((u) => u.id === id);
 
   if (index === 1) {
     return res.status(404).json({error: 'user not found'});
@@ -34,7 +34,7 @@ const putUserById = (req, res) => {
 // TODO: deleteUserById
 const deleteUserById = (req, res) => {
   const id = Number(req.params.id);
-  const index = users.findIndex(u => u.id === id);
+  const index = users.findIndex((u) => u.id === id);
 
   if (index === -1) {
     return res.status(404).json({error: 'user not found'});
@@ -61,18 +61,26 @@ const postUser = (pyynto, vastaus) => {
   vastaus.status(201).json({message: 'new user added', user_id: newId});
 };
 
+//Tietokanta versio:
 const postLogin = (req, res) => {
   const {username, password} = req.body;
   // haetaan käyttäjä-objekti käyttäjän nimen perusteella
-  const userFound = users.find(user => username === user.username);
-  if (userFound) {
-    if (userFound.password === password) {
-      delete userFound.password;
-      return res.json({message: 'login ok', user: userFound});
+  const user = findUserByUsername(username);
+  if (user) {
+    if (user.password === password) {
+      delete user.password;
+      return res.json({message: 'login ok', user: username});
     }
     return res.status(403).json({error: 'invalid password'});
   }
   res.status(404).json({error: 'user not found'});
 };
 
-export {deleteUserById, getUserById, getUsers, postLogin, postUser, putUserById};
+export {
+  deleteUserById,
+  getUserById,
+  getUsers,
+  postLogin,
+  postUser,
+  putUserById,
+};

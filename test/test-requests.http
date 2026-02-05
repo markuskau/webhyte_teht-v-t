@@ -27,16 +27,19 @@ Content-Type: application/json
 ### users endpoints
 
 ### Get all users
-GET {{apiurl}}/users
+GET {{apiurl}}/entries/6
 
 ### Register new user
-POST {{apiurl}}/users
+POST {{apiurl}}/entries
 Content-Type: application/json
 
 {
-  "username": "donald",
-  "password": "duck",
-  "email": "donald@example.com"
+  "user_id": "3",
+  "entry_date": "2026-02-04",
+  "mood": "Happy",
+  "weight": "66",
+  "sleep_hours": "6",
+  "notes": "Feeling good"
 }
 
 ### Register new user FAIL (email missing)
@@ -50,6 +53,27 @@ Content-Type: application/json
 
 ### User login
 POST {{apiurl}}/users/login
+Content-Type: application/json
+
+{
+  "username": "donald",
+  "password": "duck"
+}
+
+### Register new user
+POST {{apiurl}}/users
+Content-Type: application/json
+
+{
+  "username": "donald",
+  "password": "duck",
+  "email": "donald@example.com"
+}
+
+
+
+### Register new user FAIL (email missing)
+POST {{apiurl}}/users
 Content-Type: application/json
 
 {
