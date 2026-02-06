@@ -5,4 +5,4 @@ const items = [
   {id: 3, name: 'Banaaneja'},
 ];
 
-export default items
+export default items;

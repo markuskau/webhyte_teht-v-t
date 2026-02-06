@@ -1,4 +1,4 @@
-import items from '../models/itemModel.js';
+import items from '../models/item-model.js';
 
 const getItems = (req, res) => {
   res.json(items);

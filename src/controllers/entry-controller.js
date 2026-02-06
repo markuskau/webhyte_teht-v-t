@@ -1,8 +1,4 @@
-import {
-  listAllEntries,
-  findEntryById,
-  addEntry,
-} from '../models/entryModel.js';
+import {listAllEntries, findEntryById, addEntry} from "../models/entry-model.js";
 
 const getEntries = async (req, res) => {
   const result = await listAllEntries();
@@ -39,12 +35,12 @@ const postEntry = async (req, res) => {
   }
 };
 
-const putEntry = async (req, res) => {
+const putEntry = (req, res) => {
   // placeholder for future implementation
   res.sendStatus(200);
 };
 
-const deleteEntry = async (req, res) => {
+const deleteEntry = (req, res) => {
   // placeholder for future implementation
   res.sendStatus(200);
 };

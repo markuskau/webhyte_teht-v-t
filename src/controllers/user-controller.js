@@ -1,8 +1,13 @@
-//import users from '../models/userModel.js';
-import { findUserByUsername } from "../models/userModel.js";
+// HUOM: mokkidata on poistettu modelista
+//import users from '../models/user-model.js';
+
+import {findUserByUsername} from '../models/user-model.js';
 
 
+// TODO: lisää tietokantafunktiot user modeliin
+// ja käytä niitä täällä
 
+// TODO: refaktoroi tietokantafunktiolle
 const getUsers = (req, response) => {
   // ÄLÄ IKINÄ lähetä salasanoja HTTP-vastauksessa
   for (let i = 0; i < users.length; i++) {
@@ -14,34 +19,11 @@ const getUsers = (req, response) => {
 };
 
 // TODO: getUserById
-const getUserById = (req, res) => {
-  const id = Number(req.params.id);
-  const user = users.find((u) => u.id === id);
-
-  if (!user) {
-    return res.status(404).json({error: 'user not found'});
-  }
-};
 // TODO: putUserById
-const putUserById = (req, res) => {
-  const id = Number(req.params.id);
-  const index = users.findIndex((u) => u.id === id);
-
-  if (index === 1) {
-    return res.status(404).json({error: 'user not found'});
-  }
-};
 // TODO: deleteUserById
-const deleteUserById = (req, res) => {
-  const id = Number(req.params.id);
-  const index = users.findIndex((u) => u.id === id);
-
-  if (index === -1) {
-    return res.status(404).json({error: 'user not found'});
-  }
-};
 
 // Käyttäjän lisäys (rekisteröityminen)
+// TODO: refaktoroi tietokantafunktiolle
 const postUser = (pyynto, vastaus) => {
   const newUser = pyynto.body;
   // Uusilla käyttäjillä pitää olla kaikki vaaditut ominaisuudet tai palautetaan virhe
@@ -57,30 +39,25 @@ const postUser = (pyynto, vastaus) => {
   // ominaisuudet ja lisätään users-taulukon loppuun
   users.push({id: newId, ...newUser});
   delete newUser.password;
-  console.log('users', users);
+  // console.log('users', users);
   vastaus.status(201).json({message: 'new user added', user_id: newId});
 };
 
-//Tietokanta versio:
-const postLogin = (req, res) => {
+
+// Tietokantaversio valmis
+const postLogin = async (req, res) => {
   const {username, password} = req.body;
   // haetaan käyttäjä-objekti käyttäjän nimen perusteella
-  const user = findUserByUsername(username);
+  const user = await findUserByUsername(username);
+  //console.log('postLogin user from db', user);
   if (user) {
     if (user.password === password) {
       delete user.password;
-      return res.json({message: 'login ok', user: username});
+      return res.json({message: 'login ok', user: user});
     }
     return res.status(403).json({error: 'invalid password'});
   }
   res.status(404).json({error: 'user not found'});
 };
 
-export {
-  deleteUserById,
-  getUserById,
-  getUsers,
-  postLogin,
-  postUser,
-  putUserById,
-};
+export {getUsers, postUser, postLogin};
