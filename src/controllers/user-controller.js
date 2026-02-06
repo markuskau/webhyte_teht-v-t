@@ -1,25 +1,32 @@
 // HUOM: mokkidata on poistettu modelista
 //import users from '../models/user-model.js';
 
-import {findUserByUsername} from '../models/user-model.js';
+import {findAllUsers, findUserById, findUserByUsername} from '../models/user-model.js';
 
 
 // TODO: lisää tietokantafunktiot user modeliin
 // ja käytä niitä täällä
 
 // TODO: refaktoroi tietokantafunktiolle
-const getUsers = (req, response) => {
-  // ÄLÄ IKINÄ lähetä salasanoja HTTP-vastauksessa
-  for (let i = 0; i < users.length; i++) {
-    delete users[i].password;
-    // kaikki emailit sensuroitu esimerkki
-    // users[i].email = 'sensored';
-  }
-  response.json(users);
+const getUsers = async (req, res) => {
+  const users = await findAllUsers();
+  // ÄLÄ IKINÄ lähetä salasanoja
+  users.forEach((user) => {
+    delete user.password;
+  });
+  res.json(users);
 };
-
 // TODO: getUserById
+const getUserById = async (req, res) => {
+  const user = await findUserById(req.params.id);
+  if (!user) {
+    return res.status(404).json({error: 'user not found'});
+  };
+  delete user.password;
+  res.json(user);
+};
 // TODO: putUserById
+
 // TODO: deleteUserById
 
 // Käyttäjän lisäys (rekisteröityminen)
