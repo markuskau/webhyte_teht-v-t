@@ -1,13 +1,8 @@
-// HUOM: mokkidata on poistettu modelista
-//import users from '../models/user-model.js';
-
-import {findAllUsers, findUserById, findUserByUsername} from '../models/user-model.js';
+import jwt from 'jsonwebtoken';
+import {addUser, findAllUsers, findUserById, findUserByUsername} from '../models/user-model.js';
 
 
-// TODO: lisää tietokantafunktiot user modeliin
-// ja käytä niitä täällä
-
-// TODO: refaktoroi tietokantafunktiolle
+// GET /api/Users
 const getUsers = async (req, res) => {
   const users = await findAllUsers();
   // ÄLÄ IKINÄ lähetä salasanoja
@@ -16,7 +11,9 @@ const getUsers = async (req, res) => {
   });
   res.json(users);
 };
-// TODO: getUserById
+
+
+// GET /api/Users/:id
 const getUserById = async (req, res) => {
   const user = await findUserById(req.params.id);
   if (!user) {
@@ -25,33 +22,47 @@ const getUserById = async (req, res) => {
   delete user.password;
   res.json(user);
 };
-// TODO: putUserById
 
-// TODO: deleteUserById
+
+// PUT /api/Users/:id
+const putUserById = async (req, res) => {
+  const updated = await (req.params.id);
+  if (!user) {
+    return res.status(404).json({error: 'user not found'});
+  };
+  delete user.password;
+  res.json(user);
+};
+
+// DELETE /api/Users/:id
+const deleteUserById = async (req, res) => {
+  const deleted = await deleteUserById(req.params.id);
+  if (!deleted) {
+    return res.status(404).json({error: 'user not found'});
+  }
+  res.json({message: 'user deleted'});
+};
 
 // Käyttäjän lisäys (rekisteröityminen)
-// TODO: refaktoroi tietokantafunktiolle
-const postUser = (pyynto, vastaus) => {
-  const newUser = pyynto.body;
-  // Uusilla käyttäjillä pitää olla kaikki vaaditut ominaisuudet tai palautetaan virhe
-  // itse koodattu erittäin yksinkertainen syötteen validointi
-  if (!(newUser.username && newUser.password && newUser.email)) {
-    return vastaus.status(400).json({error: 'required fields missing'});
+// POST /api/Users
+const postUser = (req, res) => {
+  const {username, password, email} = req.body;
+  if (!(username && password && email)) {
+    return res.status(400).json({error: 'required fields missing'});
   }
-
-  // HUOM: ÄLÄ ikinä loggaa käyttäjätietoja ensimmäisten pakollisten testien jälkeen!!! (tietosuoja)
-  //console.log('registering new user', newUser);
-  const newId = users[users.length - 1].id + 1;
-  // luodaan uusi objekti, joka sisältää id-ominaisuuden ja kaikki newUserObjektin
-  // ominaisuudet ja lisätään users-taulukon loppuun
-  users.push({id: newId, ...newUser});
-  delete newUser.password;
-  // console.log('users', users);
-  vastaus.status(201).json({message: 'new user added', user_id: newId});
+  const existingUser = await findUserByUsername(username);
+  if (existingUser) {
+    return res.status(400).json({error: 'username already exists'});
+  }
+  const newUser = await addUser ({
+    username, password, email
+  });
+  
+  res.status(201).json({message: 'new user added', newUser.id});
 };
 
 
-// Tietokantaversio valmis
+// POST /api/login
 const postLogin = async (req, res) => {
   const {username, password} = req.body;
   // haetaan käyttäjä-objekti käyttäjän nimen perusteella
@@ -67,4 +78,4 @@ const postLogin = async (req, res) => {
   res.status(404).json({error: 'user not found'});
 };
 
-export {getUsers, postUser, postLogin};
+export {getUsers, postUser, postLogin, getUserById, putUserById, deleteUserById};
