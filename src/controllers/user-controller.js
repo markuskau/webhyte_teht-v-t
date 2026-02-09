@@ -23,7 +23,7 @@ const getUserById = async (req, res) => {
 };
 
 
-// TODO: putUserById
+// PUT /api/Users/:id
 const putUserById = async (req, res) => {
   const updated = await (req.params.id);
   if (!user) {
