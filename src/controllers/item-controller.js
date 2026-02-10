@@ -1,9 +1,11 @@
 import items from '../models/item-model.js';
 
+// Haetaan kaikki itemit
 const getItems = (req, res) => {
   res.json(items);
 };
 
+// Haetaan yksittäinen item id:n perusteella
 const getItemById = (req, res) => {
   console.log('getting item id:', req.params.id);
   const itemFound = items.find((item) => item.id == req.params.id);
@@ -14,6 +16,7 @@ const getItemById = (req, res) => {
   }
 };
 
+// Päivitetään item id:n perusteella
 const putItemById = (req, res) => {
   console.log('updating item id:', req.params.id);
   const itemIndex = items.findIndex((item) => item.id == req.params.id);
@@ -25,6 +28,7 @@ const putItemById = (req, res) => {
   }
 };
 
+// Poistetaan item id:n perusteella
 const deleteItemById = (req, res) => {
   console.log('deleting item id:', req.params.id);
   const itemIndex = items.findIndex((item) => item.id == req.params.id);
@@ -36,6 +40,7 @@ const deleteItemById = (req, res) => {
   }
 };
 
+// Lisätään uusi item
 const postNewItem = (req, res) => {
   //console.log('add item request body', req.body);
   // name is mandatory property for new item

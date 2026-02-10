@@ -1,5 +1,6 @@
 import express from 'express';
-import {deleteUserById, getUserById, getUsers, postLogin, postUser, putUserById} from '../controllers/user-controller.js';
+import {deleteUserById, getUserById, getUsers, postLogin, postUser, putUserById, getMe} from '../controllers/user-controller.js';
+import {authenticateToken} from '../middlewares/authentication.js';
 
 const userRouter = express.Router();
 
@@ -13,6 +14,9 @@ userRouter.route('/')
 
 // POST user login
 userRouter.post('/api/users/login', postLogin);
+
+// Get user info based on token
+userRouter.get('/me', authenticateToken, getMe);
 
 // app.get('/api/users/:id');
 userRouter.get('/:id', getUserById);

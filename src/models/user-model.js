@@ -1,6 +1,6 @@
 import promisePool from '../utils/database.js';
 
-// TODO: lisää modelit ja muokkaa kontrollerit reiteille:
+
 // GET /api/users - list all users
 const findAllUsers = async () => {
   const sql = 'SELECT * FROM Users';

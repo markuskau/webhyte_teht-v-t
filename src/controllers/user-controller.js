@@ -45,24 +45,31 @@ const deleteUserById = async (req, res) => {
 
 // Käyttäjän lisäys (rekisteröityminen)
 // POST /api/Users
-const postUser = (req, res) => {
+const postUser = async (req, res) => {
   const {username, password, email} = req.body;
+  // Tarkistetaan että kaikki pakolliset kentät on annettu
   if (!(username && password && email)) {
     return res.status(400).json({error: 'required fields missing'});
   }
+  // tarkistetaan onko käyttäjänimi jo olemassa
   const existingUser = await findUserByUsername(username);
   if (existingUser) {
-    return res.status(400).json({error: 'username already exists'});
+  return res.status(400).json({error: 'username already exists'});
   }
+
+  // Luodaan uusi käyttäjä tietokantaan
   const newUser = await addUser ({
     username, password, email
   });
   
-  res.status(201).json({message: 'new user added', newUser.id});
+  // Palautetaan onnistunut vastaus ja luotu käyttäjä
+  res.status(201).json({message: 'new user added', newUser});
 };
 
 
-// POST /api/login
+
+
+// Tietokantaversio valmis
 const postLogin = async (req, res) => {
   const {username, password} = req.body;
   // haetaan käyttäjä-objekti käyttäjän nimen perusteella
@@ -71,11 +78,21 @@ const postLogin = async (req, res) => {
   if (user) {
     if (user.password === password) {
       delete user.password;
-      return res.json({message: 'login ok', user: user});
+      // generate & sign token using a secret and expiration time
+      // read from .env file
+      const token = jwt.sign(user, process.env.JWT_SECRET, {
+        expiresIn: process.env.JWT_EXPIRES_IN,
+      });
+      return res.json({message: 'login ok', user, token});
     }
     return res.status(403).json({error: 'invalid password'});
   }
   res.status(404).json({error: 'user not found'});
 };
 
-export {getUsers, postUser, postLogin, getUserById, putUserById, deleteUserById};
+// Get user information stored inside token
+const getMe = (req, res) => {
+  res.json(req.user);
+};
+
+export {getUsers, postUser, postLogin, getUserById, putUserById, deleteUserById, getMe};
