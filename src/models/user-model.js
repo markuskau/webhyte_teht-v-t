@@ -3,7 +3,7 @@ import promisePool from '../utils/database.js';
 
 // GET /api/users - list all users
 const findAllUsers = async () => {
-  const sql = 'SELECT * FROM Users';
+  const sql = 'SELECT username, created_at FROM Users';
   const [rows] = await promisePool.execute(sql);
   return rows;
 };
@@ -13,6 +13,7 @@ const findUserById = async (id) => {
   const [rows] = await promisePool.execute(sql, [id]);
   return rows[0];
 };
+
 // POST /api/users - add a new user
 const addUser = async (user) => {
   const {username, password, email} = user;

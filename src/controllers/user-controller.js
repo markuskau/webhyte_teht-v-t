@@ -1,3 +1,4 @@
+import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import {addUser, findAllUsers, findUserById, findUserByUsername} from '../models/user-model.js';
 
@@ -27,11 +28,11 @@ const getUserById = async (req, res) => {
 // PUT /api/Users/:id
 const putUserById = async (req, res) => {
   const updated = await (req.params.id);
-  if (!user) {
+  if (!updated) {
     return res.status(404).json({error: 'user not found'});
   };
-  delete user.password;
-  res.json(user);
+  delete updated.password;
+  res.json(updated);
 };
 
 // DELETE /api/Users/:id
@@ -45,25 +46,24 @@ const deleteUserById = async (req, res) => {
 
 // Käyttäjän lisäys (rekisteröityminen)
 // POST /api/Users
-const postUser = async (req, res) => {
-  const {username, password, email} = req.body;
-  // Tarkistetaan että kaikki pakolliset kentät on annettu
-  if (!(username && password && email)) {
-    return res.status(400).json({error: 'required fields missing'});
+// Käyttäjän lisäys (rekisteröityminen)
+const postUser = async (pyynto, vastaus) => {
+  const newUser = pyynto.body;
+  // Uusilla käyttäjillä pitää olla kaikki vaaditut ominaisuudet tai palautetaan virhe
+  // itse koodattu erittäin yksinkertainen syötteen validointi
+  if (!(newUser.username && newUser.password && newUser.email)) {
+    return vastaus.status(400).json({error: 'required fields missing'});
   }
-  // tarkistetaan onko käyttäjänimi jo olemassa
-  const existingUser = await findUserByUsername(username);
-  if (existingUser) {
-  return res.status(400).json({error: 'username already exists'});
-  }
+  // HUOM: ÄLÄ ikinä loggaa käyttäjätietoja ensimmäisten pakollisten testien jälkeen!!! (tietosuoja)
+  //console.log('registering new user', newUser);
 
-  // Luodaan uusi käyttäjä tietokantaan
-  const newUser = await addUser ({
-    username, password, email
-  });
-  
-  // Palautetaan onnistunut vastaus ja luotu käyttäjä
-  res.status(201).json({message: 'new user added', newUser});
+  // Lasketaan salasanasta tiiviste (hash)
+  const hash = await bcrypt.hash(newUser.password, 10);
+  //console.log('salasanatiiviste:', hash);
+  // Korvataan selväkielinen salasana tiivisteellä ennen kantaan tallennusta
+  newUser.password = hash;
+  const newUserId = await addUser(newUser);
+  vastaus.status(201).json({message: 'new user added', user_id: newUserId});
 };
 
 
