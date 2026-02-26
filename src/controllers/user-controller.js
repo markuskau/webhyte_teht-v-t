@@ -4,13 +4,9 @@ import {addUser, findAllUsers, findUserById, findUserByUsername} from '../models
 
 
 // GET /api/Users
-const getUsers = async (req, res) => {
+const getUsers = async (req, response) => {
   const users = await findAllUsers();
-  // ÄLÄ IKINÄ lähetä salasanoja
-  users.forEach((user) => {
-    delete user.password;
-  });
-  res.json(users);
+  response.json(users);
 };
 
 

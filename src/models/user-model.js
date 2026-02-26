@@ -14,12 +14,21 @@ const findUserById = async (id) => {
   return rows[0];
 };
 
+
 // POST /api/users - add a new user
 const addUser = async (user) => {
   const {username, password, email} = user;
-  const sql = `INSERT INTO Users (username, password, email) VALUES (?, ?, ?)`;
-  const [result] = await promisePool.execute(sql, [username, password, email]);
-  return {id: result.insertId, username, email};
+  const sql = `INSERT INTO Users (username, password, email)
+               VALUES (?, ?, ?)`;
+  const params = [username, password, email];
+  try {
+    const result = await promisePool.execute(sql, params);
+    //console.log('insert result', result);
+    return {user_id: result[0].insertId};
+  } catch (e) {
+    console.error('error', e.message);
+    return {error: e.message};
+  }
 };
 
 // Huom: virheenkäsittely puuttuu
