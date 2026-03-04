@@ -7,7 +7,7 @@ import {
 } from '../models/entry-model.js';
 
 const getEntries = async (req, res) => {
-  const result = await listAllEntriesByUserId();
+  const result = await listAllEntriesByUserId(req.user.user_id);
   if (!result.error) {
     res.json(result);
   } else {

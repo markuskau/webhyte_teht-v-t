@@ -46,7 +46,6 @@ const deleteUserById = async (req, res) => {
 const postUser = async (pyynto, vastaus) => {
   const newUser = pyynto.body;
   // Uusilla käyttäjillä pitää olla kaikki vaaditut ominaisuudet tai palautetaan virhe
-  // itse koodattu erittäin yksinkertainen syötteen validointi
   if (!(newUser.username && newUser.password && newUser.email)) {
     return vastaus.status(400).json({error: 'required fields missing'});
   }
@@ -68,22 +67,26 @@ const postUser = async (pyynto, vastaus) => {
 // Tietokantaversio valmis
 const postLogin = async (req, res) => {
   const {username, password} = req.body;
-  // haetaan käyttäjä-objekti käyttäjän nimen perusteella
+
   const user = await findUserByUsername(username);
-  //console.log('postLogin user from db', user);
-  if (user) {
-    if (user.password === password) {
-      delete user.password;
-      // generate & sign token using a secret and expiration time
-      // read from .env file
-      const token = jwt.sign(user, process.env.JWT_SECRET, {
-        expiresIn: process.env.JWT_EXPIRES_IN,
-      });
-      return res.json({message: 'login ok', user, token});
-    }
+
+  if (!user) {
+    return res.status(404).json({error: 'user not found'});
+  }
+
+  const passwordCorrect = await bcrypt.compare(password, user.password);
+
+  if (!passwordCorrect) {
     return res.status(403).json({error: 'invalid password'});
   }
-  res.status(404).json({error: 'user not found'});
+
+  delete user.password;
+
+  const token = jwt.sign(user, process.env.JWT_SECRET, {
+    expiresIn: process.env.JWT_EXPIRES_IN,
+  });
+
+  res.json({message: 'login ok', user, token});
 };
 
 // Get user information stored inside token
