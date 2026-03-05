@@ -26,20 +26,17 @@ const getEntryById = async (req, res) => {
 };
 
 const postEntry = async (req, res) => {
-  const {entry_date, mood, weight, sleep_hours, notes} = req.body;
-  // user property (& id) is added to req by authentication middleware
   const user_id = req.user.user_id;
-  if (entry_date && (weight || mood || sleep_hours || notes) && user_id) {
-    const result = await addEntry({user_id, ...req.body});
-    if (result.entry_id) {
-      res.status(201);
-      res.json({message: 'New entry added.', ...result});
-    } else {
-      res.status(500);
-      res.json(result);
-    }
+
+  const result = await addEntry({ user_id, ...req.body });
+
+  if (result.entry_id) {
+    res.status(201).json({
+      message: 'New entry added.',
+      ...result,
+    });
   } else {
-    res.sendStatus(400);
+    res.status(500).json(result);
   }
 };
 
