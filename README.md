@@ -1,65 +1,73 @@
 # 🩺 HealthDiary
 
-A simple web application for tracking personal health data.
+Yksinkertainen verkkosovellus henkilökohtaisten terveystietojen seurantaan.
 
-Users can monitor sleep, calculate BMI, and maintain a personal health diary.
+Käyttäjät voivat seurata unta, laskea BMI:n ja pitää henkilökohtaista terveispäiväkirjaa.
 
-## Screenshots
+## ✨ Ominaisuudet
 
-### Login Page
+- 👤 Käyttäjärekisteröinti
+- 🔐 Kirjautuminen ja uloskirjautuminen
+- 😴 Unen keskiarvon seuranta
+- ⚖️ BMI-kaavio
+- 🧮 BMI-laskuri
+- 📓 Päiväkirjamerkintöjen katselu
+- ➕ Päiväkirjamerkintöjen lisääminen
+- ❌ Päiväkirjamerkintöjen poistaminen
+
+Huomio AI:n käytöstä
+Osa CSS- ja JavaScript-tiedostoista on tuotettu tekoälyn (ChatGPT ja Copilot) avulla, mutta kaikki koodi on manuaalisesti kirjoitettu, tarkistettu ja täysin ymmärretty. Kooditiedostoissa on kommentteja, joissa mainitaan AI:n hyödyntäminen.
+
+## Database
+
+Tietokannan rakenne esitetty kuvana
+
+<p align="left">
+<img src="db/diagram.png" width="600">
+</p>
+
+## Kuvakaappaukset sovelluksesta
+
+### Kirjautumissivu
 <p align="left">
 <img src="screenshots/loginPage.png" width="600">
 </p>
 
-### Home Page
+### Etusivu
 <p align="left">
 <img src="screenshots/HomePage.png" width="600">
 <img src="screenshots/HomePage2.png" width="600">
 </p>
 
-### BMI Page
+### BMI-sivu
 <p align="left">
 <img src="screenshots/bmiPage.png" width="600">
 </p>
 
-### Diary Page
+### Päiväkirjasivu
 <p align="left">
 <img src="screenshots/diaryPage.png" width="600">
 <img src="screenshots/entryDialogPage.png" width="600">
 <img src="screenshots/addEntryPage.png" width="600">
 </p>
 
-## Database
-<p align="left">
-<img src="db/diagram.png" width="800">
-</p>
+## 🐞 Mahdolliset bugit
 
+- Päiväkirjasivun footer näkyy aluksi liian ylhäällä
+- BMI-sivun navbar ei ole täysin sama kuin muilla sivuilla, mutta toimii.
+- BMI-mittaukset katoavat kirjautumisen yhteydessä.
 
-## ✨ Features
-
-- 👤 User registration
-- 🔐 Login and logout
-- 😴 View average sleep
-- ⚖️ BMI chart
-- 🧮 BMI calculator
-- 📓 View diary entries
-- ➕ Add diary entries
-- ❌ Delete diary entries
-
-## 🐞 Known Bugs
-
-- Diary page footer is initially positioned too high.
-
-## 📚 References
+## 📚 Lähteet
 
 - https://www.w3schools.com/
-- This project used **ChatGPT (v5.2)** and **Microsoft Copilot** as development assistance.
+- AI-työkalut: ChatGPT (v5.2), Microsoft Copilot.
 
-AI was mainly used for:
-- CSS styling
-- JavaScript support
-- Code review
+AI:n käyttö projektissa:
+- CSS-tyylien ideointi
+- Javascript funktiot
+- Koodin tarkastus ja ehdotukset
 
-All code was manually reviewed and modified by the author using the course materials.
+Julkaistu sovellus:
+- https://users.metropolia.fi/~markkaur/web_hyte/Final%20version/dist/
 
 
