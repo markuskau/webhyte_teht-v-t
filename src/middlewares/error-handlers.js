@@ -1,4 +1,3 @@
-// tuodaan express-validatorin funktio
 import {validationResult} from 'express-validator';
 
 /**
@@ -9,21 +8,16 @@ import {validationResult} from 'express-validator';
 * @return {*} next function call
 */
 const validationErrorHandler = (req, res, next) => {
-  // Kerätään express-validatorin tuottamat virheet
   const errors = validationResult(req, {strictParams: ['body']});
-  // Jos virheitä löytyy
   if (!errors.isEmpty()) {
-    // Luodaan uusi Error-objekti
+    // console.log('validation errors', errors.array({onlyFirstError: true}));
     const error = new Error('Bad Request');
     error.status = 400;
-    // Muokataan virhelista helpommin luettavaan muotoon
     error.errors = errors.array({onlyFirstError: true}).map((error) => {
       return {field: error.path, message: error.msg};
     });
-    // Lähetetään virhe seuraavaan error middlewareen
     return next(error);
   }
-  // Jos virheitä ei ole, jatketaan seuraavaan routeen
   next();
 };
 
@@ -35,18 +29,16 @@ const validationErrorHandler = (req, res, next) => {
  * @param {*} next
  */
 const notFoundHandler = (req, res, next) => {
-  // Luodaan virhe
   const error = new Error(`Not Found - ${req.originalUrl}`);
   error.status = 404;
-  // Lähetetään virhe errorHandleriin
   next(error); // forward error to error handler
 };
 /**
 * Custom default middleware for handling errors
 */
+// eslint-disable-next-line no-unused-vars
 const errorHandler = (err, req, res, next) => {
   res.status(err.status || 500); // default is 500 if err.status is not defined
-  // Palautetaan virhe JSON-muodossa
   res.json({
     error: {
       message: err.message,

@@ -92,3 +92,7 @@ Authorization: Bearer {{token}}
   "sleep_hours": 5,
   "notes": "Too short sleep"
 }
+
+### Get Kubios data
+GET {{apiurl}}/kubios/user-data
+Authorization: Bearer {{token}}

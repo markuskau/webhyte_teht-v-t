@@ -5,6 +5,7 @@ import userRouter from './routes/user-router.js';
 import requestLogger from './middlewares/logger.js';
 import entryRouter from './routes/entry-router.js';
 import {errorHandler, notFoundHandler} from './middlewares/error-handlers.js';
+import kubiosRouter from './routes/kubios-router.js';
 const hostname = '127.0.0.1';
 const app = express();
 const port = 3000;
@@ -28,6 +29,9 @@ app.get('/api', (req, res) => {
 app.use('/api/users', userRouter);
 // Diary entries resource router
 app.use('/api/entries', entryRouter);
+
+// Kubios data router
+app.use('/api/kubios', kubiosRouter);
 
 // Dummy items resource
 app.use('/api/items', itemRouter);
